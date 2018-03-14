@@ -1,32 +1,45 @@
 package de.marvin;
 
-
 import java.io.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        byte[] b = {'h', 'e', 'l', 'l', 'o','.','w','o','r','l','d'};
 
-        try {
+        PlayFigure one      = new PlayFigure(500, "Drache", new String []{"Feuer","Bizeps"});
+        PlayFigure two      = new PlayFigure(200, "Riese", new String []{"Keule","Bizeps"});
+        PlayFigure three    = new PlayFigure(50, "Troll", new String []{"Geldsack","Spitze Fußnägel"});
 
-            // create a new output stream named test
-            OutputStream os = new FileOutputStream("test.txt");
+        try{
+            ObjectOutputStream os = new ObjectOutputStream ( new FileOutputStream ( "Game.ser" ) );
 
-            // craete a new input stream from test
-            InputStream is = new FileInputStream("test.txt");
+            os.write ( one );
+            os.write ( two );
+            os.write ( three );
+            os.close ();
+        } catch (IOException e) {
+            e.printStackTrace ();
+        }
 
-            // write something into test
-            os.write(b);
+        one = null;
+        two = null;
+        three = null;
 
-            // read what is written into test
-            for (int i = 0; i < b.length; i++) {
-                System.out.print("" + (char) is.read());
-            }
+        try{
+            ObjectInputStream is = new ObjectInputStream ( new FileInputStream ( "Game.ser" ) );
+            PlayFigure OneGet = (PlayFigure) is.readObject ();
+            PlayFigure TwoGet = (PlayFigure) is.readObject ();
+            PlayFigure ThreeGet = (PlayFigure) is.readObject ();
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            System.out.println ( "Typ 1.Figure: " + OneGet.getTyp () );
+            System.out.println ( "Typ 2.Figure: " + TwoGet.getTyp () );
+            System.out.println ( "Typ 3.Figure: " + ThreeGet.getTyp () );
+        }catch (Exception e){
+            e.printStackTrace ();
         }
 
     }
+
+
 }
